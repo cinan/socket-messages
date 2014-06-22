@@ -1,4 +1,6 @@
 import 'package:unittest/unittest.dart';
+import 'package:json_object/json_object.dart';
+
 import '../lib/messages.dart';
 
 main() {
@@ -80,7 +82,7 @@ main() {
   });
 
   group('message constructor (pong type) tests', () {
-    PingMessage m;
+    PongMessage m;
 
     setUp(() {
       m = new PongMessage();
@@ -96,6 +98,64 @@ main() {
       };
 
       expect(PongMessage.matches(map), isTrue);
+    });
+  });
+
+  group('container tests', () {
+    MessageContainer c;
+
+    setUp(() {
+      c = new MessageContainer();
+    });
+
+    test('add messages to container', () {
+      DataMessage m1 = new DataMessage(1);
+      ConfirmationMessage m2 = new ConfirmationMessage(2);
+      PingMessage m3 = new PingMessage();
+
+      c..add(m1)..add(m2)..add(m3);
+
+      expect(c.length, equals(3));
+    });
+
+    test('container is iterable', () {
+      PingMessage m1 = new PingMessage();
+      PongMessage m2 = new PongMessage();
+      c..add(m1)..add(m2);
+
+      int i = 0;
+
+      for (var m in c) {
+        if (i == 0) {
+          expect(m is PingMessage, isTrue);
+        } else {
+          expect(m is PongMessage, isTrue);
+        }
+
+        i++;
+      }
+    });
+
+    solo_test('wrap all messages', () {
+      for (int i in [1,2,3,4,5]) {
+        c.add(new PingMessage());
+      }
+
+      JsonObject wrapped = c.wrapped;
+      expect(wrapped is Map, isTrue);
+      expect(wrapped.containsKey('messages'), isTrue);
+      expect(wrapped.first, hasLength(5));
+      expect(wrapped.toString(), contains('type'));
+    });
+
+    test('clear all', () {
+      for (int i in [1,2,3]) {
+        c.add(new PingMessage());
+      }
+
+      expect(c, hasLength(3));
+      c.clear();
+      expect(c, hasLength(0));
     });
   });
 }
