@@ -4,6 +4,8 @@ class MessageContainer implements Iterable<Message> {
 
   List<Message> _messages = new List<Message>();
 
+  static matches(Map map) => map['messages'] is List;
+
   JsonObject get wrapped {
     JsonObject obj = new JsonObject();
     obj['messages'] = [];
@@ -67,7 +69,7 @@ class MessageContainer implements Iterable<Message> {
 
   Message elementAt(int index) => _messages.elementAt(index);
 
-  List<dynamic> toList({ bool growable: truMessage }) => _messages.toList(growable:growable);
+  List<dynamic> toList({ bool growable: true }) => _messages.toList(growable:growable);
 
   Set<dynamic> toSet() => _messages.toSet();
 
