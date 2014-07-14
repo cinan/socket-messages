@@ -25,6 +25,8 @@ class MessageContainer implements Iterable<Message> {
     _messages.add(message);
   }
 
+  void addAll(Iterable<Message> iterable) => _messages.addAll(iterable);
+
   Message get first => _messages.first;
 
   Message get last => _messages.last;
