@@ -2,21 +2,28 @@ part of messages;
 
 class ConfirmationMessage extends Message {
 
-  int _id;
-
-  get id => _id;
-
   int confirmID;
+
+  bool confirmableFlag = false;
+  bool volatileFlag = false;
 
   Map<String, dynamic> get data => {
       'type': 'confirm',
-      'id':   _id,
+      'id':   id,
       'body': {
         'confirmID': confirmID
       }
   };
 
-  ConfirmationMessage(int this._id);
+  ConfirmationMessage([int id]) {
+    this.id = id;
+  }
+
+  factory ConfirmationMessage.fromMap(Map map) {
+    ConfirmationMessage message = new ConfirmationMessage(map['id']);
+    message.confirmID = map['body']['confirmID'];
+    return message;
+  }
 
   static matches(Map map) =>
     map['type'] == 'confirm' &&

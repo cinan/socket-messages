@@ -6,5 +6,14 @@ class PongMessage extends Message {
       'type': 'pong',
   };
 
+  bool confirmableFlag = false;
+  bool volatileFlag = true;
+
+  PongMessage();
+
+  factory PongMessage.fromMap(Map map) {
+    return new PongMessage();
+  }
+
   static matches(Map map) => map['type'] == 'pong';
 }
